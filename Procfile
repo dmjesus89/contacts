@@ -1,1 +1,2 @@
-web: java -Dserver.port:3000 $JAVA_OPTS -jar target/contacts*.jar 
+web: java $JAVA_OPTS -jar target/contacts*.jar 
+
