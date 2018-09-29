@@ -55,9 +55,9 @@ public class ContactResource {
 		}
 		return ResponseEntity.notFound().build();
 	}
-	
+
 	@GetMapping("/{name}")
-	public ResponseEntity<List<Contact>> getContacts(@RequestParam(name="name") String name) {
+	public ResponseEntity<List<Contact>> getContacts(@PathVariable String name) {
 		List<Contact> listUser = userService.getContacts();
 		if (!listUser.isEmpty()) {
 			return ResponseEntity.ok(listUser);
