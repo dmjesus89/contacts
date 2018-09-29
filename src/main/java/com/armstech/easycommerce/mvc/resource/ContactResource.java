@@ -16,10 +16,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.armstech.easycommerce.api.event.ResourceCreateEvent;
 import com.armstech.easycommerce.mvc.model.Contact;
+import com.armstech.easycommerce.mvc.model.filter.ContactFilter;
 import com.armstech.easycommerce.mvc.service.ContactServiceImpl;
 
 @RestController
@@ -47,6 +49,15 @@ public class ContactResource {
 
 	@GetMapping
 	public ResponseEntity<List<Contact>> getContacts() {
+		List<Contact> listUser = userService.getContacts();
+		if (!listUser.isEmpty()) {
+			return ResponseEntity.ok(listUser);
+		}
+		return ResponseEntity.notFound().build();
+	}
+	
+	@GetMapping("/{name}")
+	public ResponseEntity<List<Contact>> getContacts(@RequestParam(name="name") String name) {
 		List<Contact> listUser = userService.getContacts();
 		if (!listUser.isEmpty()) {
 			return ResponseEntity.ok(listUser);
