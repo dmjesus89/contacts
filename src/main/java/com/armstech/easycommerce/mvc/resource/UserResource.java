@@ -16,50 +16,52 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.armstech.easycommerce.api.event.ResourceCreateEvent;
-import com.armstech.easycommerce.mvc.model.Contact;
-import com.armstech.easycommerce.mvc.service.ContactServiceImpl;
+import com.armstech.easycommerce.mvc.model.User;
+import com.armstech.easycommerce.mvc.service.UserServiceImpl;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 @RestController
-@RequestMapping("/contacts")
-public class ContactResource {
+@RequestMapping("/users")
+public class UserResource {
 
 	@Autowired
-	private ContactServiceImpl contactService;
+	private UserServiceImpl userService;
 
 	@Autowired
 	private ApplicationEventPublisher publisher;
 
-	@PostMapping("/{idUser}")
-	public ResponseEntity<Contact> save(@PathVariable String idUser, @Valid @RequestBody Contact contact,
-			HttpServletResponse response) {
-		contact = contactService.save(idUser, contact);
-		publisher.publishEvent(new ResourceCreateEvent(this, response, contact.getId()));
-		return ResponseEntity.status(HttpStatus.CREATED).body(contact);
+	@PostMapping
+	public ResponseEntity<User> save(@Valid @RequestBody User user, HttpServletResponse response) {
+		user = userService.save(user);
+		publisher.publishEvent(new ResourceCreateEvent(this, response, user.getId()));
+		return ResponseEntity.status(HttpStatus.CREATED).body(user);
 	}
 
-	@PutMapping("/{idUser}/{idContact}")
-	public ResponseEntity<Contact> update(@PathVariable String idUser, @PathVariable String idContact,
-			@RequestBody Contact user) {
-		Contact userUpdated = contactService.update(idUser, idContact, user);
+	@GetMapping
+	public ResponseEntity<List<User>> getUsers() {
+		List<User> users = userService.getUsers();
+		return users != null ? ResponseEntity.ok(users) : ResponseEntity.notFound().build();
+	}
+
+	@PutMapping("/{id}")
+	public ResponseEntity<User> update(@PathVariable String id, @RequestBody User user) {
+		User userUpdated = userService.update(id, user);
 		return ResponseEntity.ok(userUpdated);
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<Contact> getContactById(@PathVariable String id) {
-		Contact user = contactService.getContactById(id);
+	public ResponseEntity<User> getUserById(@PathVariable String id) {
+		User user = userService.getUserById(id);
 		return user != null ? ResponseEntity.ok(user) : ResponseEntity.notFound().build();
 	}
 
 	@DeleteMapping("/{id}")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void delete(@PathVariable String id) {
-		contactService.delete(id);
+		userService.delete(id);
 	}
 
 }

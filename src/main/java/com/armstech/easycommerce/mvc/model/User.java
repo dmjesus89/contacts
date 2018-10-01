@@ -3,29 +3,29 @@ package com.armstech.easycommerce.mvc.model;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import javax.validation.constraints.NotNull;
-
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 
 import lombok.Data;
 
 @Data
-public class Contact {
+public class User {
 
 	@Id
 	private String id;
 
 	private String name;
 
-	@NotNull
-	private List<String> phoneNumber;
-
-	private String notes;
+	private List<Contact> contacts;
 
 	private String email;
+
+	private String password;
 
 	private LocalDateTime dtInsert;
 
 	private Boolean active;
+
+	private LocalDateTime dtLastScheduleUpdated;
 
 }

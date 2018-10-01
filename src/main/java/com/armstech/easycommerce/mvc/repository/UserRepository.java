@@ -6,16 +6,15 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 
 import com.armstech.easycommerce.mvc.model.Contact;
+import com.armstech.easycommerce.mvc.model.User;
 
-public interface ContactRepository extends MongoRepository<Contact, String> {
+public interface UserRepository extends MongoRepository<User, String> {
 
 	Contact findByName(String name);
 
-	List<Contact> findByNameLikeOrderByNameAsc(String name);
+	Contact findByEmail(String email);
 
-	Contact getDetailContactById(String id);
-
-	@Query("{'contact.notes': ?0}")
-	List<Contact> findContactsByidUser(String idUser);
+	@Query("{'users.id': ?0}")
+	List<Contact> findContactsById(String idUser);
 
 }
